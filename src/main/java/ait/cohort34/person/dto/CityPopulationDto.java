@@ -13,6 +13,6 @@ import lombok.Setter;
 public class CityPopulationDto {
 
    String city;
-   Integer population;
+   Long population;//важно Long
 
 }

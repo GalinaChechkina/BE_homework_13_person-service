@@ -4,6 +4,7 @@ import ait.cohort34.person.dto.AddressDto;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -13,6 +14,8 @@ import java.time.LocalDate;
 @Getter
 @EqualsAndHashCode(of = "id")
 @Entity  //теперь Person стал сущностью
+// @Table(name = "persons")//если у таблицы в бд другое название
+
 public class Person {
 
     @Id//обязательно для реляционной бд
@@ -21,7 +24,7 @@ public class Person {
     String name;
     LocalDate birthDate;
     @Setter
-    @Embedded
+    @Embedded//поля адреса будут встроены в персону
     Address address;
 
 }

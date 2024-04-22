@@ -5,6 +5,7 @@ import ait.cohort34.person.dto.CityPopulationDto;
 import ait.cohort34.person.dto.PersonDto;
 import ait.cohort34.person.service.PersonService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -42,11 +43,12 @@ public class PersonController{
     @GetMapping("/population/city")
     public Iterable<CityPopulationDto> getCityPopulation(){ return personService.getCityPopulation();}
 
+    //@Transactional можно ставить транзакцию в контроллере, но Эдуард ставит в сервисе
     @PutMapping("/{id}/name/{newName}")
     public PersonDto updateName(@PathVariable Integer id, @PathVariable String newName) {
         return personService.updateName(id, newName);
     }
-
+    //@Transactional
     @PutMapping("/{id}/address")
     public PersonDto updateAddress(@PathVariable Integer id, @RequestBody AddressDto newAddressDto) {
         return personService.updateAddress(id, newAddressDto);
