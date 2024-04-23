@@ -1,27 +1,23 @@
 package ait.cohort34.person.service;
 
 import ait.cohort34.person.dao.PersonRepository;
-import ait.cohort34.person.dto.AddressDto;
-import ait.cohort34.person.dto.CityPopulationDto;
-import ait.cohort34.person.dto.PersonDto;
+import ait.cohort34.person.dto.*;
 import ait.cohort34.person.dto.exceptions.PersonNotFoundException;
 import ait.cohort34.person.model.Address;
+import ait.cohort34.person.model.Child;
+import ait.cohort34.person.model.Employee;
 import ait.cohort34.person.model.Person;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
-public class PersonServiceImpl implements PersonService {
+public class PersonServiceImpl implements PersonService, CommandLineRunner {
 
     final PersonRepository personRepository;
     final ModelMapper modelMapper;
@@ -37,37 +33,57 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
+    public Boolean addChild(ChildDto childDto) {
+        return null;
+    }
+
+    @Override
+    public Boolean addEmployee(EmployeeDto employeeDto) {
+        return null;
+    }
+
+    @Override
     public PersonDto findById(Integer id) {
         Person person = personRepository.findById(id).orElseThrow(PersonNotFoundException::new);
         return modelMapper.map(person, PersonDto.class);
     }
 
     @Override
-    public Iterable<PersonDto> findByCity(String city) {
-        List<Person> persons = personRepository.findByAddressCityIgnoreCase(city);
-        return persons.stream()
-                .map(e->modelMapper.map(e,PersonDto.class))
-                .toList();
+    public Iterable<ChildDto> findAllChildren() {
+        return null;
     }
 
     @Override
-    public Iterable<PersonDto> findByAge(Integer from, Integer to) {
+    public EmployeeDto[] findEmployeesBySalary(Integer minSalary, Integer maxSalary) {
+        return new EmployeeDto[0];
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PersonDto[] findByCity(String city) {
+        return personRepository.findByAddressCityIgnoreCase(city)
+                .map(e->modelMapper.map(e,PersonDto.class))
+                .toArray(PersonDto[]::new);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PersonDto[] findByAge(Integer from, Integer to) {
         LocalDate fromDate = LocalDate.now().minusYears(to);
         LocalDate toDate = LocalDate.now().minusYears(from);
 
-        List<Person> persons = personRepository.findByBirthDateBetween(fromDate, toDate);
-        return   persons.stream()
+        return   personRepository.findByBirthDateBetween(fromDate, toDate)
                 .map(person -> modelMapper.map(person, PersonDto.class))
-                .toList();
+                .toArray(PersonDto[]::new);
     }
 
     @Override
     @Transactional(readOnly = true)//так пойдет, т.к. хоть Transactional неэффективна, но с readOnly = true
 //чтение б. происходить с параллельном режиме, а изменение в транзакционном
-    public Iterable<PersonDto> findByName(String name) {
+    public PersonDto[] findByName(String name) {
         return personRepository.findByNameIgnoreCase(name)
                 .map(e->modelMapper.map(e, PersonDto.class))
-                .toList();
+                .toArray(PersonDto[]::new);
     }
 
     @Override
@@ -131,5 +147,20 @@ public class PersonServiceImpl implements PersonService {
         Person person = personRepository.findById(id).orElseThrow(RuntimeException::new);
         personRepository.delete(person);
         return modelMapper.map(person, PersonDto.class);
+    }
+    @Transactional
+    @Override
+    public void run(String... args)throws Exception{
+        if(personRepository.count()==0){
+            Person person = new Person(1000, "Jo",LocalDate.of(1985,3,11),
+                    new Address("Berlin", "Alexander pl.",50));
+            Child child = new Child(2000,"Karl", LocalDate.of(1985,3,11),
+                    new Address("Hamburg","HBH",12),"Sunny");
+            Employee employee = new Employee(3000, "Nina",LocalDate.of(1980,6,11),
+                    new Address("Frankfurt", "Uni str.",12), "Mercury",8000);
+            personRepository.save(person);
+            personRepository.save(child);
+            personRepository.save(employee);
+        }
     }
 }

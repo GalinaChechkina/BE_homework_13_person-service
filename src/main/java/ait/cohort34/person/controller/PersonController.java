@@ -1,17 +1,14 @@
 package ait.cohort34.person.controller;
 
-import ait.cohort34.person.dto.AddressDto;
-import ait.cohort34.person.dto.CityPopulationDto;
-import ait.cohort34.person.dto.PersonDto;
+import ait.cohort34.person.dto.*;
 import ait.cohort34.person.service.PersonService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/person")
 @RequiredArgsConstructor
-public class PersonController{
+public class PersonController {
 
     final PersonService personService;
 
@@ -20,23 +17,43 @@ public class PersonController{
         return personService.addPerson(personDto);
     }
 
+    @PostMapping
+    public Boolean addChild(@RequestBody ChildDto childDto) {
+        return personService.addChild(childDto);
+    }
+
+    @PostMapping
+    public Boolean addEmployee(@RequestBody EmployeeDto employeeDto) {
+        return personService.addEmployee(employeeDto);
+    }
+
     @GetMapping("/{id}")
     public PersonDto findById(@PathVariable Integer id) {
         return personService.findById(id);
     }
 
+    @GetMapping("/children")
+    public Iterable<ChildDto> findAllChildren() {
+        return personService.findAllChildren();
+    }
+
+    @GetMapping("/salary/{minSalary}/{maxSalary}")
+    public EmployeeDto[] findEmployeesBySalary(@PathVariable Integer minSalary,@PathVariable Integer maxSalary) {
+        return personService.findEmployeesBySalary(minSalary,maxSalary);
+    }
+
     @GetMapping("/city/{city}")
-    public Iterable<PersonDto> findByCity(@PathVariable String city) {
+    public PersonDto[] findByCity(@PathVariable String city) {
         return personService.findByCity(city);
     }
 
     @GetMapping("/ages/{from}/{to}")
-    public Iterable<PersonDto> findByAge(@PathVariable Integer from, @PathVariable Integer to) {
+    public PersonDto[] findByAge(@PathVariable Integer from, @PathVariable Integer to) {
         return personService.findByAge(from,to);
     }
 
     @GetMapping("/name/{name}")
-    public Iterable<PersonDto> findByName(@PathVariable String name) {
+    public PersonDto[] findByName(@PathVariable String name) {
         return personService.findByName(name);
     }
 
