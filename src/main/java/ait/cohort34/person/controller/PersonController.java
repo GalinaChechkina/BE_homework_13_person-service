@@ -17,16 +17,6 @@ public class PersonController {
         return personService.addPerson(personDto);
     }
 
-    @PostMapping
-    public Boolean addChild(@RequestBody ChildDto childDto) {
-        return personService.addChild(childDto);
-    }
-
-    @PostMapping
-    public Boolean addEmployee(@RequestBody EmployeeDto employeeDto) {
-        return personService.addEmployee(employeeDto);
-    }
-
     @GetMapping("/{id}")
     public PersonDto findById(@PathVariable Integer id) {
         return personService.findById(id);

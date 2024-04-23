@@ -32,15 +32,6 @@ public class PersonServiceImpl implements PersonService, CommandLineRunner {
         return true;
     }
 
-    @Override
-    public Boolean addChild(ChildDto childDto) {
-        return null;
-    }
-
-    @Override
-    public Boolean addEmployee(EmployeeDto employeeDto) {
-        return null;
-    }
 
     @Override
     public PersonDto findById(Integer id) {

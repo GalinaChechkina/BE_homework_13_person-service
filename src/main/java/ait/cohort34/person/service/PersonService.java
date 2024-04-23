@@ -6,10 +6,6 @@ public interface PersonService {
 
      Boolean addPerson(PersonDto personDto);
 
-     Boolean addChild(ChildDto childDto);
-
-     Boolean addEmployee(EmployeeDto employeeDto);
-
      PersonDto findById(Integer id);
 
      Iterable<ChildDto> findAllChildren();
