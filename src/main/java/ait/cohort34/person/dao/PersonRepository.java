@@ -1,6 +1,8 @@
 package ait.cohort34.person.dao;
 
 import ait.cohort34.person.dto.CityPopulationDto;
+import ait.cohort34.person.model.Child;
+import ait.cohort34.person.model.Employee;
 import ait.cohort34.person.model.Person;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -23,5 +25,9 @@ public interface PersonRepository extends JpaRepository<Person, Integer> {
 
     @Query("select new ait.cohort34.person.dto.CityPopulationDto(p.address.city, count(p)) from Person p group by p.address.city order by count (p) desc ")
     List<CityPopulationDto> getCitiesPopulation();
+
+    Stream<Child>findChildrenBy();
+
+    Stream<Employee> findEmployeesBySalaryBetween(int min, int max);//но лучше BigDecimal
 
 }

@@ -8,7 +8,7 @@ public interface PersonService {
 
      PersonDto findById(Integer id);
 
-     Iterable<ChildDto> findAllChildren();
+     ChildDto[] findAllChildren();
 
      EmployeeDto[]findEmployeesBySalary(Integer minSalary, Integer maxSalary);
 
@@ -18,11 +18,11 @@ public interface PersonService {
 
      PersonDto[] findByName(String name);
 
-     Iterable<CityPopulationDto> getCityPopulation();
-
      PersonDto updateName(Integer id, String newName);
 
      PersonDto updateAddress(Integer id, AddressDto newAddressDto);
 
      PersonDto deleteById(Integer id);
+
+     Iterable<CityPopulationDto> getCitiesPopulation();
 }

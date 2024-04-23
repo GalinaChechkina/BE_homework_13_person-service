@@ -14,6 +14,7 @@ public class PersonController {
 
     @PostMapping
     public boolean addPerson(@RequestBody PersonDto personDto){
+
         return personService.addPerson(personDto);
     }
 
@@ -23,7 +24,7 @@ public class PersonController {
     }
 
     @GetMapping("/children")
-    public Iterable<ChildDto> findAllChildren() {
+    public ChildDto[] findAllChildren() {
         return personService.findAllChildren();
     }
 
@@ -48,7 +49,7 @@ public class PersonController {
     }
 
     @GetMapping("/population/city")
-    public Iterable<CityPopulationDto> getCityPopulation(){ return personService.getCityPopulation();}
+    public Iterable<CityPopulationDto> getCitiesPopulation(){ return personService.getCitiesPopulation();}
 
     //@Transactional можно ставить транзакцию в контроллере, но Эдуард ставит в сервисе
     @PutMapping("/{id}/name/{newName}")
